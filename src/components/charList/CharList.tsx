@@ -4,16 +4,16 @@ import {m_service} from "../../services/mservice-api.ts";
 import Preloader from "../preloader/preloader.tsx";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
 import {CharItems, CharListProps, CharListState} from "../../app-types/types.ts";
+import {useCatchUI} from "../../hooks/useCatchUI.ts";
 
 
 const StyledCharList = styled.div``
 
 const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
 
+    const {onError, onLoad, error, isLoading} = useCatchUI()
     const [state, setState] = useState<CharListState>({
-        isLoading: true,
         isPaginating: false,
-        error: false,
         offset: 210,
         chars: []
     })
@@ -31,22 +31,12 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
         }
     }
 
-    const onError = () => {
-        setState({
-            ...state,
-            isLoading: false,
-            error: true
-        });
-    };
 
     const loadChars = () => {
-        setState({
-            ...state,
-            error: false,
-        });
+        onLoad(true)
 
         m_service
-            .getAllCharacters()
+            .getAllCharacters({})
             .then(onCharLoaded)
             .catch(onError)
 
@@ -59,22 +49,21 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
             isPaginating: true
         })
 
-        m_service.getAllCharacters(state.offset)
+        m_service.getAllCharacters({offset: state.offset})
             .then(newchars => {
                 setState((prevState) => ({
                     ...prevState,
-                    chars: [...prevState.chars, ...newchars],
-                    isLoading: false,
+                    chars: [...state.chars, ...newchars],
                     isPaginating: false,
                 }))
+                onLoad(false)
             })
             .catch((e) => {
                 setState({
                     ...state,
-                    error: true,
-                    isLoading: false,
                     isPaginating: false,
                 })
+                onError(true)
                 console.log(e)
             })
 
@@ -84,8 +73,6 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
         setState((prevState) => ({
             ...prevState,
             chars: [...chars],
-            isLoading: false,
-            error: false
         }))
     }
 
@@ -96,22 +83,22 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
 
     useEffect(() => {
 
-            paginateChars()
+        paginateChars()
 
     }, [state.offset])
 
 
     return (
-        <StyledCharList style={state.isLoading ? {
+        <StyledCharList style={isLoading ? {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             height: '50%',
         } : {display: 'block'}} className={'char__list'}>
 
-            <ErrorBoundary error={state.error} onTryhandler={loadChars}>
+            <ErrorBoundary error={error} onTryhandler={loadChars}>
 
-                <Preloader isLoading={state.isLoading} afterSpinner={() => (
+                <Preloader isLoading={isLoading} afterSpinner={() => (
                     <>
 
                         <ul className="char__grid">

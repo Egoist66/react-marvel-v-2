@@ -100,9 +100,7 @@ export interface DataRootCharacters {
 
 
 export interface CharListState {
-    error: boolean,
     offset: number
-    isLoading: boolean
     isPaginating: boolean
     chars: CharItems[]
 }
@@ -132,8 +130,6 @@ export interface CharInner {
 }
 
 export interface RandomCharState {
-    error: boolean;
-    isLoading: boolean;
     char: CharInner;
 }
 
@@ -154,4 +150,6 @@ export interface CharInfoProps  {
 
 export interface CharComicsInfoProps extends RandomCharState {
     loadCharInfo: () => void;
+    isLoading: boolean
+    error: boolean
 }

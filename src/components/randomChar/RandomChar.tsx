@@ -7,15 +7,16 @@ import Preloader from "../preloader/preloader";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
 import {CharViewProps, RandomCharState} from "../../app-types/types";
 import {drawCharThubmnail} from "../../utils/check-thumbnail";
+import {useCatchUI} from "../../hooks/useCatchUI.ts";
 
 const StyledRandomChar = styled.div``;
 
 
 const RandomChar: FC = memo(() => {
 
+    const {onError, onLoad, error, isLoading} = useCatchUI()
+
     const [state, setState] = useState<RandomCharState>({
-        isLoading: false,
-        error: false,
         char: {
             description: null,
             homepage: "",
@@ -27,30 +28,19 @@ const RandomChar: FC = memo(() => {
     })
 
 
-    const onError = () => {
-        setState({
-            ...state,
-            isLoading: false,
-            error: true
-        });
-    };
+
 
     const updateRandomChar = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            error: false,
-        });
+       onLoad(true)
 
         m_service
             .getCharacter(randomId)
             .then((char) => {
                 setState({
                     ...state,
-                    isLoading: false,
-                    error: false,
                     ...char,
                 });
+                onLoad(false)
             })
             .catch(onError);
     };
@@ -61,10 +51,10 @@ const RandomChar: FC = memo(() => {
 
 
     return (
-        <ErrorBoundary onTryhandler={updateRandomChar} error={state.error}>
+        <ErrorBoundary onTryhandler={updateRandomChar} error={error}>
             <StyledRandomChar className="randomchar">
                 <Preloader
-                    isLoading={state.isLoading}
+                    isLoading={isLoading}
                     afterSpinner={() => <CharView char={state.char}/>}
                 />
 

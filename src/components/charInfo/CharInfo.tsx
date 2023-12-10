@@ -6,15 +6,15 @@ import Preloader from "../preloader/preloader";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
 import Skeleton from "../skeleton/Skeleton";
 import {CharComicsInfoProps, CharInfoProps, RandomCharState} from "../../app-types/types.ts";
+import {useCatchUI} from "../../hooks/useCatchUI.ts";
 
 const StyledCharInfo = styled.div``;
 
 
 const CharInfo: FC<CharInfoProps> = memo(({charId}) => {
 
+    const {onError, onLoad, error, isLoading} = useCatchUI()
     const [state, setState] = useState<RandomCharState>({
-        isLoading: false,
-        error: false,
         char: {
             description: null,
             homepage: "",
@@ -26,35 +26,25 @@ const CharInfo: FC<CharInfoProps> = memo(({charId}) => {
     })
 
     const loadCharInfo = useCallback(() => {
+        onLoad(true)
 
-        setState({
-            ...state,
-            isLoading: true,
-            error: false,
-
-        });
         m_service
             .getCharacter(() => charId)
             .then((char) => {
                 setState({
                     ...state,
-                    isLoading: false,
-                    error: false,
                     ...char,
                 });
+                onLoad(false)
             })
             .catch(onError);
     }, [charId])
 
-    const onError = () => {
-        setState({
-            ...state,
-            isLoading: false,
-            error: true,
-        });
-    };
 
     useEffect(() => {
+        if(charId === null){
+            return
+        }
         loadCharInfo()
     }, [charId])
 
@@ -69,8 +59,8 @@ const CharInfo: FC<CharInfoProps> = memo(({charId}) => {
             ) : (
                 <CharComicsInfoView
                     char={state.char}
-                    error={state.error}
-                    isLoading={state.isLoading}
+                    error={error}
+                    isLoading={isLoading}
                     loadCharInfo={loadCharInfo}
                 />
             )}

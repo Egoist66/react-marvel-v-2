@@ -2,6 +2,10 @@ import {DataRootCharacters} from "../app-types/types.ts";
 import {RandomID} from "../utils/randomId.ts";
 import {MDataService} from "./mdata-service.ts";
 
+type getAllCharsParams = {
+    offset?: number,
+    limit?: number
+}
 class MService extends MDataService {
 
     private _apiBase: string = 'https://gateway.marvel.com:443/v1/public/'
@@ -21,9 +25,9 @@ class MService extends MDataService {
 
     }
 
-    async getAllCharacters(offsetCount: number = 0, offset: number = this._charOffset, limit: number = this._limitCount) {
+    async getAllCharacters({offset = this._charOffset, limit = this._limitCount}: getAllCharsParams) {
         const chars: DataRootCharacters = await this.getResource(`${this._apiBase}characters?limit=${limit}
-            &offset=${offset + offsetCount}
+            &offset=${offset}
             &${this._apiKey}`.trim(), 'json'
         )
 
@@ -34,6 +38,7 @@ class MService extends MDataService {
     }
 
     async getCharacter(id: () => RandomID | null) {
+
 
         const char: DataRootCharacters = await this.getResource(`${this._apiBase}characters/${id()}?${this._apiKey}`, 'json')
         return this.transformCharData(char.data.results)
