@@ -57,6 +57,13 @@ export const GlobalStyles = createGlobalStyle`
       justify-content: space-between;
     
   }
+
+  .comics__item-img {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+    width: 225px;
+    height: 190px;
+    display: block;
+  }
   
   .randomchar {
     display: grid;

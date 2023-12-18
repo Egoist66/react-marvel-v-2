@@ -1,61 +1,29 @@
 import mjolnir from "../../assets/images/mjolnir.png";
 import styled from "styled-components";
-import {FC, memo, useEffect, useState} from "react";
-import {m_service} from "../../services/mservice-api";
-import {randomId} from "../../utils/randomId";
+import {FC, memo, useEffect} from "react";
 import Preloader from "../preloader/preloader";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
-import {CharViewProps, RandomCharState} from "../../app-types/types";
-import {drawCharThubmnail} from "../../utils/check-thumbnail";
-import {useCatchUI} from "../../hooks/useCatchUI.ts";
+import {useChar} from "../../hooks/useChar.ts";
+import {RandomCharView} from "./RandomCharView.tsx";
 
 const StyledRandomChar = styled.div``;
 
 
 const RandomChar: FC = memo(() => {
 
-    const {onError, onLoad, error, isLoading} = useCatchUI()
-
-    const [state, setState] = useState<RandomCharState>({
-        char: {
-            description: null,
-            homepage: "",
-            name: null,
-            comics: null,
-            thumbnail: "",
-            wiki: "",
-        },
-    })
-
-
-
-
-    const updateRandomChar = () => {
-       onLoad(true)
-
-        m_service
-            .getCharacter(randomId)
-            .then((char) => {
-                setState({
-                    ...state,
-                    ...char,
-                });
-                onLoad(false)
-            })
-            .catch(onError);
-    };
+    const {loadRandomChar, isLoading, error, char} = useChar()
 
     useEffect(() => {
-        updateRandomChar()
+        loadRandomChar()
     }, [])
 
 
     return (
-        <ErrorBoundary onTryhandler={updateRandomChar} error={error}>
+        <ErrorBoundary onTryhandler={loadRandomChar} error={error}>
             <StyledRandomChar className="randomchar">
                 <Preloader
                     isLoading={isLoading}
-                    afterSpinner={() => <CharView char={state.char}/>}
+                    afterSpinner={() => <RandomCharView char={char}/>}
                 />
 
                 <div className="randomchar__static">
@@ -66,7 +34,7 @@ const RandomChar: FC = memo(() => {
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
                     <button
-                        onClick={updateRandomChar}
+                        onClick={loadRandomChar}
                         className="button button__main"
                     >
                         <div className="inner">try it</div>
@@ -83,38 +51,5 @@ const RandomChar: FC = memo(() => {
 
 })
 
-
-const CharView: FC<CharViewProps> = memo(({char}) => {
-
-
-    return (
-        <div className="randomchar__block">
-            <img
-                style={{
-                    objectFit: drawCharThubmnail({char})
-                }}
-                src={char.thumbnail}
-                alt="Random character"
-                className={"randomchar__img"}
-            />
-            <div className="randomchar__info">
-                <p className="randomchar__name">{char.name}</p>
-                <p className="randomchar__descr">{char.description}</p>
-                <div className="randomchar__btns">
-                    <a href={char.homepage} className="button button__main">
-                        <div className="inner">homepage</div>
-                    </a>
-                    <a
-                        target="_blank"
-                        href={char.wiki}
-                        className="button button__secondary"
-                    >
-                        <div className="inner">Wiki</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    );
-})
 
 export default RandomChar;

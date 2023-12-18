@@ -1,91 +1,24 @@
 import styled from "styled-components";
-import {FC, memo, useEffect, useState} from "react";
-import {m_service} from "../../services/mservice-api.ts";
+import {FC, memo} from "react";
 import Preloader from "../preloader/preloader.tsx";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
-import {CharItems, CharListProps, CharListState} from "../../app-types/types.ts";
-import {useCatchUI} from "../../hooks/useCatchUI.ts";
+import {CharListItemProps, CharListProps} from "../../app-types/types.ts";
+import {useCharList} from "../../hooks/useCharList.ts";
 
 
 const StyledCharList = styled.div``
 
-const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
+const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelect}) => {
 
-    const {onError, onLoad, error, isLoading} = useCatchUI()
-    const [state, setState] = useState<CharListState>({
-        isPaginating: false,
-        offset: 210,
-        chars: []
-    })
-
-
-    const incrementLimit = (count: number) => {
-        return () => {
-            setState((prevState) => (
-                {
-                    ...prevState,
-                    offset: prevState.offset + count
-
-                }
-            ))
-        }
-    }
-
-
-    const loadChars = () => {
-        onLoad(true)
-
-        m_service
-            .getAllCharacters({})
-            .then(onCharLoaded)
-            .catch(onError)
-
-
-    };
-
-    const paginateChars = () => {
-        setState({
-            ...state,
-            isPaginating: true
-        })
-
-        m_service.getAllCharacters({offset: state.offset})
-            .then(newchars => {
-                setState((prevState) => ({
-                    ...prevState,
-                    chars: [...state.chars, ...newchars],
-                    isPaginating: false,
-                }))
-                onLoad(false)
-            })
-            .catch((e) => {
-                setState({
-                    ...state,
-                    isPaginating: false,
-                })
-                onError(true)
-                console.log(e)
-            })
-
-    }
-
-    const onCharLoaded = (chars: CharItems[]) => {
-        setState((prevState) => ({
-            ...prevState,
-            chars: [...chars],
-        }))
-    }
-
-    useEffect(() => {
-        loadChars()
-    }, [])
-
-
-    useEffect(() => {
-
-        paginateChars()
-
-    }, [state.offset])
+    const {
+        isLoading,
+        error,
+        incrementLimit,
+        loadChars,
+        isPaginating,
+        offset,
+        chars
+    } = useCharList()
 
 
     return (
@@ -102,10 +35,10 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
                     <>
 
                         <ul className="char__grid">
-                            {state.chars.length ? state.chars.map(char => {
+                            {chars.length ? chars.map(char => {
                                 return (
                                     <CharListItem
-                                        onCharListSelect={onCharSelected}
+                                        onCharListSelect={onCharSelect}
                                         id={char.id}
                                         selectedChar={selectedChar}
                                         src={char.thumbnail}
@@ -116,12 +49,12 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
                                 )
                             }) : <h2>No characters were found!</h2>}
                         </ul>
-                        <button style={{display: state.offset >= 1563 ? 'none' : 'block'}}
-                                disabled={state.isPaginating}
+                        <button style={{display: offset >= 1563 ? 'none' : 'block'}}
+                                disabled={isPaginating}
                                 onClick={incrementLimit(9)}
                                 className="button button__main button__long">
 
-                            <p className="inner">{state.isPaginating ? 'Loading...' : 'Load more'}</p>
+                            <p className="inner">{isPaginating ? 'Loading...' : 'Load more'}</p>
                         </button>
 
                     </>
@@ -136,15 +69,7 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelected}) => {
 })
 
 
-type CharListItemProps = {
-    src: string
-    alt: string
-    id: number
-    selectedChar: number | null
-    name: string
-    onCharListSelect: (id: number) => void
-}
-const CharListItem: FC<CharListItemProps> = ({name, selectedChar, onCharListSelect, src, id, alt}) => {
+const CharListItem: FC<CharListItemProps> = memo(({name, selectedChar, onCharListSelect, src, id, alt}) => {
 
     return (
 
@@ -163,6 +88,6 @@ const CharListItem: FC<CharListItemProps> = ({name, selectedChar, onCharListSele
 
 
     )
-}
+})
 
 export default CharList;

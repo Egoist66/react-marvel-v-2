@@ -30,7 +30,7 @@ const App: FC = memo(() => {
                     <ErrorBoundary>
                         <CharList
                             selectedChar={selectedChar}
-                            onCharSelected={onCharSelect}
+                            onCharSelect={onCharSelect}
 
                         />
                     </ErrorBoundary>
@@ -42,6 +42,7 @@ const App: FC = memo(() => {
                 </div>
                 <img className="bg-decoration" src={decoration} alt="vision"/>
             </main>
+
         </StyledApp>
     )
 

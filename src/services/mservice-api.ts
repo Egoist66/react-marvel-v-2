@@ -1,4 +1,4 @@
-import {DataRootCharacters} from "../app-types/types.ts";
+import {DataRootCharacters, RootComics} from "../app-types/types.ts";
 import {RandomID} from "../utils/randomId.ts";
 import {MDataService} from "./mdata-service.ts";
 
@@ -43,6 +43,12 @@ class MService extends MDataService {
         const char: DataRootCharacters = await this.getResource(`${this._apiBase}characters/${id()}?${this._apiKey}`, 'json')
         return this.transformCharData(char.data.results)
 
+    }
+
+    async getComics(limit = this._limitCount, offset = 1){
+        const comics: RootComics = await this.getResource(`${this._apiBase}comics?limit=${limit}&offset=${offset}&${this._apiKey.trim()}`, 'json')
+
+        return this.transformComicsData(comics.data.results)
     }
 
 
