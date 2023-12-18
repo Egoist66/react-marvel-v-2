@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import {FC, useEffect, useState} from "react";
-import {m_service} from "../../services/mservice-api.ts";
-import {useCatchUI} from "../../hooks/useCatchUI.ts";
-import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
-import Preloader from "../preloader/preloader.tsx";
-import {drawComicsThubmnail} from "../../utils/check-thumbnail.ts";
+import {m_service} from "../../../services/mservice-api.ts";
+import {useCatchUI} from "../../../hooks/useCatchUI.ts";
+import ErrorBoundary from "../../error-boundary/ErrorBoundary.tsx";
+import Preloader from "../../preloader/preloader.tsx";
+import {drawComicsThubmnail} from "../../../utils/check-thumbnail.ts";
+import AppBanner from "../../appBanner/AppBanner.tsx";
 
 
 const StyledComicsList = styled.div`
@@ -50,35 +51,37 @@ const ComicsList: FC = () => {
         loadComics()
     }, [])
     return (
-        <StyledComicsList className="comics__list">
-            <ErrorBoundary error={error} onTryhandler={() => {
-            }}>
-                <ul className="comics__grid">
+        <>
+            <AppBanner/>
 
+            <StyledComicsList className="comics__list">
+
+                <ErrorBoundary error={error} onTryhandler={() => {
+                }}>
                     <Preloader isLoading={isLoading} afterSpinner={() => (
+                        <ul className="comics__grid">
 
-                        <>
                             {state.comics ? state.comics.map(c => (
                                 <li key={c.id} className="comics__item">
                                     <a href={c.comicsLink}>
-                                        <img style={{objectFit: drawComicsThubmnail(c.thumbnail)}} src={c.thumbnail} alt="ultimate war" className="comics__item-img"/>
+                                        <img style={{objectFit: drawComicsThubmnail(c.thumbnail)}} src={c.thumbnail}
+                                             alt="ultimate war" className="comics__item-img"/>
                                         <div className="comics__item-name">{c.name}</div>
                                         <div className="comics__item-price">{c.price}$</div>
                                     </a>
                                 </li>
-                            )): <h2>No comics exists...</h2>}
+                            )) : <h2>No comics exists...</h2>}
 
 
-                        </>
-
+                        </ul>
                     )}/>
+                </ErrorBoundary>
+                <button className="button button__main button__long">
+                    <div className="inner">load more</div>
+                </button>
+            </StyledComicsList>
 
-                </ul>
-            </ErrorBoundary>
-            <button className="button button__main button__long">
-                <div className="inner">load more</div>
-            </button>
-        </StyledComicsList>
+        </>
     )
 }
 

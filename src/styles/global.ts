@@ -57,6 +57,10 @@ export const GlobalStyles = createGlobalStyle`
       justify-content: space-between;
     
   }
+  
+  .active-nav {
+    color: #9F0013;
+  }
 
   .comics__item-img {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
