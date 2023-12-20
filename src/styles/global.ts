@@ -58,7 +58,7 @@ export const GlobalStyles = createGlobalStyle`
     
   }
   
-  .active-nav {
+  .active.nav-link {
     color: #9F0013;
   }
 

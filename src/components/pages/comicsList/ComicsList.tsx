@@ -23,13 +23,18 @@ export type ComicsListStateType = {
 
 type ComicsType = {
     comics: ComicsListStateType[]
+    isPaginating: boolean
+    offset: number
 }
 const ComicsList: FC = () => {
 
     const {onError, error, isLoading, onLoad} = useCatchUI()
     const [state, setState] = useState<ComicsType>({
-        comics: []
+        comics: [],
+        isPaginating: false,
+        offset: 150,
     })
+
 
     const loadComics = () => {
         onLoad(true)
@@ -47,23 +52,67 @@ const ComicsList: FC = () => {
     }
 
 
+    const incrementLimit = (count: number) => {
+        return () => {
+            setState((prevState) => (
+                {
+                    ...prevState,
+                    offset: prevState.offset + count
+
+                }
+            ))
+        }
+    }
+
+
+    const paginateComics = () => {
+        setState({
+            ...state,
+            isPaginating: true
+        })
+
+        m_service.getComics(9, state.offset)
+            .then(newcomics => {
+                setState((prevState) => ({
+                    ...prevState,
+                    comics: [...state.comics, ...newcomics],
+                    isPaginating: false,
+                }))
+                onLoad(false)
+            })
+            .catch((e) => {
+                setState({
+                    ...state,
+                    isPaginating: false,
+                })
+                onError(true)
+                console.log(e)
+            })
+
+    }
+
     useEffect(() => {
         loadComics()
     }, [])
+
+    useEffect(() => {
+
+        paginateComics()
+
+    }, [state.offset])
     return (
         <>
             <AppBanner/>
 
             <StyledComicsList className="comics__list">
 
-                <ErrorBoundary error={error} onTryhandler={() => {
-                }}>
+                <ErrorBoundary error={error} onTryhandler={loadComics}>
                     <Preloader isLoading={isLoading} afterSpinner={() => (
                         <ul className="comics__grid">
 
-                            {state.comics ? state.comics.map(c => (
-                                <li key={c.id} className="comics__item">
-                                    <a href={c.comicsLink}>
+                            {state.comics ? state.comics.map((c, i) => (
+                                <li key={i} className="comics__item">
+                                    <a target={'_blank'} href={c.comicsLink}>
                                         <img style={{objectFit: drawComicsThubmnail(c.thumbnail)}} src={c.thumbnail}
                                              alt="ultimate war" className="comics__item-img"/>
                                         <div className="comics__item-name">{c.name}</div>
@@ -76,8 +125,8 @@ const ComicsList: FC = () => {
                         </ul>
                     )}/>
                 </ErrorBoundary>
-                <button className="button button__main button__long">
-                    <div className="inner">load more</div>
+                <button onClick={incrementLimit(9)} className="button button__main button__long">
+                    <div className="inner">{state.isPaginating ? 'Loading...' : 'Load more'}</div>
                 </button>
             </StyledComicsList>
 

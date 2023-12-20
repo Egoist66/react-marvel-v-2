@@ -45,7 +45,7 @@ class MService extends MDataService {
 
     }
 
-    async getComics(limit = this._limitCount, offset = 1){
+    async getComics(limit = this._limitCount, offset = 150){
         const comics: RootComics = await this.getResource(`${this._apiBase}comics?limit=${limit}&offset=${offset}&${this._apiKey.trim()}`, 'json')
 
         return this.transformComicsData(comics.data.results)
