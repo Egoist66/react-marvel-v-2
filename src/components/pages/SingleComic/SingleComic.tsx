@@ -6,6 +6,7 @@ import {m_service} from "../../../services/mservice-api.ts";
 import {useCatchUI} from "../../../hooks/useCatchUI.ts";
 import ErrorBoundary from "../../error-boundary/ErrorBoundary.tsx";
 import Preloader from "../../preloader/preloader.tsx";
+import {useTitle} from "../../../hooks/useTitle.ts";
 
 const StyledSingleComic = styled.div`
 
@@ -31,6 +32,11 @@ const SingleComic = memo(() => {
         }
     })
 
+    useTitle(`Comic - ${state.comic.name}`,
+        [id, state.comic.name]
+    )
+
+
     const loadComic = () => {
         onLoad(true)
         m_service.getSingleComic(id!)
@@ -48,13 +54,13 @@ const SingleComic = memo(() => {
     console.log(isLoading)
     useEffect(() => {
         loadComic()
-    }, [])
+    }, [id])
 
     return (
         <ErrorBoundary onTryhandler={loadComic} error={error}>
             <Preloader isLoading={isLoading} afterSpinner={() => (
                 <StyledSingleComic className="single-comic">
-                    <img src={state.comic.thumbnail} alt="x-men" className="single-comic__img"/>
+                    <img src={state.comic.thumbnail} alt={state.comic.name} className="single-comic__img"/>
                     <div className="single-comic__info">
                         <h2 className="single-comic__name">{state.comic.name}</h2>
                         <p className="single-comic__descr">{state.comic.description}</p>

@@ -103,6 +103,9 @@ export const GlobalStyles = createGlobalStyle`
     animation: pulse 1.5s ease-in-out .5s infinite
   }
 
+  button:disabled {
+    opacity: 0.8;
+  }
 
   .button {
     min-width: 101px;

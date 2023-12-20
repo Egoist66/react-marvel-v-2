@@ -6,11 +6,14 @@ import ComicsList from "../pages/Comics/ComicsList.tsx";
 import {Route, Routes} from "react-router-dom";
 import {Page404} from "../pages/404/404.tsx";
 import SingleComic from "../pages/SingleComic/SingleComic.tsx";
+import {useTitle} from "../../hooks/useTitle.ts";
 
 
 const StyledApp = styled.div``
 
 const App: FC = memo(() => {
+
+    useTitle('Home - Characters')
 
     return (
         <StyledApp className="app">

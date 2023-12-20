@@ -8,6 +8,7 @@ import {drawComicsThubmnail} from "../../../utils/check-thumbnail.ts";
 import AppBanner from "../../appBanner/AppBanner.tsx";
 import {Button} from "../../reusable/Button.tsx";
 import {NavLink} from "react-router-dom";
+import {useTitle} from "../../../hooks/useTitle.ts";
 
 
 const StyledComicsList = styled.div`
@@ -32,6 +33,7 @@ type ComicsType = {
 }
 const ComicsList: FC = () => {
 
+    useTitle('Comics')
     const {onError, error, isLoading, onLoad} = useCatchUI()
     const [state, setState] = useState<ComicsType>({
         comics: [],
@@ -129,7 +131,7 @@ const ComicsList: FC = () => {
                         </ul>
                     )}/>
                 </ErrorBoundary>
-                <Button onClick={incrementLimit(9)} className="button__main button__long">
+                <Button disabled={state.isPaginating} onClick={incrementLimit(9)} className="button__main button__long">
                     {state.isPaginating ? 'Loading...' : 'Load more'}
                 </Button>
             </StyledComicsList>
