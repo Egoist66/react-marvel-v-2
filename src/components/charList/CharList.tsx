@@ -4,6 +4,7 @@ import Preloader from "../preloader/preloader.tsx";
 import ErrorBoundary from "../error-boundary/ErrorBoundary.tsx";
 import {CharListItemProps, CharListProps} from "../../app-types/types.ts";
 import {useCharList} from "../../hooks/useCharList.ts";
+import {Button} from "../reusable/Button.tsx";
 
 
 const StyledCharList = styled.div``
@@ -49,13 +50,11 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelect}) => {
                                 )
                             }) : <h2>No characters were found!</h2>}
                         </ul>
-                        <button style={{display: offset >= 1563 ? 'none' : 'block'}}
-                                disabled={isPaginating}
-                                onClick={incrementLimit(9)}
-                                className="button button__main button__long">
+                        <Button style={{display: offset >= 1563 ? 'none' : 'block'}} onClick={incrementLimit(9)}
+                                className="button__main button__long">
 
-                            <p className="inner">{isPaginating ? 'Loading...' : 'Load more'}</p>
-                        </button>
+                            <p>{isPaginating ? 'Loading...' : 'Load more'}</p>
+                        </Button>
 
                     </>
 

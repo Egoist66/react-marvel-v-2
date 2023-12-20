@@ -1,6 +1,6 @@
 import {RootCharactersType, CharItems, ComicsResult} from "../app-types/types";
 import {cutString} from "../utils/string-cut";
-import {ComicsListStateType} from "../components/pages/comicsList/ComicsList.tsx";
+import {ComicsListStateType} from "../components/pages/Comics/ComicsList.tsx";
 
 
 export class MDataService {
@@ -54,14 +54,30 @@ export class MDataService {
         return results.map(r => {
 
             const transformedChars: ComicsListStateType = {
-                comicsLink: r.resourceURI,
-                name: r.title,
+                comicsLink: r?.resourceURI,
+                name: r?.title,
+                description: r?.description || 'There is no description',
                 id: r.id,
-                price: r.prices[0].price,
+                pages: r?.pageCount,
+                price: r?.prices[0]?.price + '$' || 'No price',
                 thumbnail: `${r?.thumbnail?.path}.${r?.thumbnail.extension}`
             }
             return transformedChars
         })
+    }
+    protected transformSingleComicData = (results: ComicsResult[]) => {
+
+        return {
+            comic: {
+                comicsLink: results[0]?.resourceURI,
+                name: results[0]?.title,
+                description: results[0]?.description || 'There is no description',
+                id: results[0]?.id,
+                pages: results[0]?.pageCount,
+                price: results[0]?.prices[0]?.price + '$' || 'No price',
+                thumbnail: `${results[0]?.thumbnail?.path}.${results[0]?.thumbnail.extension}`
+            }
+        }
     }
 
 }

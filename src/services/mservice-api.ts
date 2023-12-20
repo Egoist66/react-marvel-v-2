@@ -50,6 +50,11 @@ class MService extends MDataService {
 
         return this.transformComicsData(comics.data.results)
     }
+    async getSingleComic(id: string){
+        const comic: RootComics = await this.getResource(`${this._apiBase}comics/${id}?${this._apiKey.trim()}`, 'json')
+
+        return this.transformSingleComicData(comic.data.results)
+    }
 
 
 }

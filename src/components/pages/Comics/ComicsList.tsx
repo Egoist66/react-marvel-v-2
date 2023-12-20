@@ -6,6 +6,8 @@ import ErrorBoundary from "../../error-boundary/ErrorBoundary.tsx";
 import Preloader from "../../preloader/preloader.tsx";
 import {drawComicsThubmnail} from "../../../utils/check-thumbnail.ts";
 import AppBanner from "../../appBanner/AppBanner.tsx";
+import {Button} from "../../reusable/Button.tsx";
+import {NavLink} from "react-router-dom";
 
 
 const StyledComicsList = styled.div`
@@ -16,7 +18,9 @@ const StyledComicsList = styled.div`
 export type ComicsListStateType = {
     comicsLink: string
     thumbnail: string
+    description: string
     name: string
+    pages: number | string
     price: string
     id: string
 }
@@ -110,14 +114,14 @@ const ComicsList: FC = () => {
                     <Preloader isLoading={isLoading} afterSpinner={() => (
                         <ul className="comics__grid">
 
-                            {state.comics ? state.comics.map((c, i) => (
+                            {state?.comics ? state?.comics.map((c, i) => (
                                 <li key={i} className="comics__item">
-                                    <a target={'_blank'} href={c.comicsLink}>
-                                        <img style={{objectFit: drawComicsThubmnail(c.thumbnail)}} src={c.thumbnail}
-                                             alt="ultimate war" className="comics__item-img"/>
+                                    <NavLink to={`/comics/${c.id}`}>
+                                        <img  style={{objectFit: drawComicsThubmnail(c.thumbnail)}} src={c.thumbnail}
+                                             alt={c.name} className="comics__item-img"/>
                                         <div className="comics__item-name">{c.name}</div>
-                                        <div className="comics__item-price">{c.price}$</div>
-                                    </a>
+                                        <div className="comics__item-price">{c.price}</div>
+                                    </NavLink>
                                 </li>
                             )) : <h2>No comics exists...</h2>}
 
@@ -125,9 +129,9 @@ const ComicsList: FC = () => {
                         </ul>
                     )}/>
                 </ErrorBoundary>
-                <button onClick={incrementLimit(9)} className="button button__main button__long">
-                    <div className="inner">{state.isPaginating ? 'Loading...' : 'Load more'}</div>
-                </button>
+                <Button onClick={incrementLimit(9)} className="button__main button__long">
+                    {state.isPaginating ? 'Loading...' : 'Load more'}
+                </Button>
             </StyledComicsList>
 
         </>
