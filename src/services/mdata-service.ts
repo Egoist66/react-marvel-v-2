@@ -1,6 +1,5 @@
-import {RootCharactersType, CharItems, ComicsResult} from "../app-types/types";
+import {RootCharactersType, CharItems, ComicsResult, ComicsListStateType} from "../app-types/types";
 import {cutString} from "../utils/string-cut";
-import {ComicsListStateType} from "../components/pages/Comics/ComicsList.tsx";
 
 
 export class MDataService {

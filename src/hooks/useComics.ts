@@ -1,16 +1,17 @@
-import {useCatchUI} from "./useCatchUI.ts";
 import {useEffect, useState} from "react";
-import {CharListState} from "../app-types/types.ts";
 import {m_service} from "../services/mservice-api.ts";
+import {useCatchUI} from "./useCatchUI.ts";
+import {ComicsType} from "../app-types/types.ts";
 
-export const useCharList = () => {
-
+export const useComics = () => {
     const {onError, error, isLoading} = useCatchUI()
-    const [state, setState] = useState<CharListState>({
+
+    const [state, setState] = useState<ComicsType>({
+        comics: [],
         isPaginating: false,
-        offset: 210,
-        chars: []
+        offset: 150,
     })
+
 
 
     const incrementLimit = (count: number) => {
@@ -26,18 +27,17 @@ export const useCharList = () => {
     }
 
 
-    const loadChars = () => {
-
+    const loadComics = () => {
         setState({
             ...state,
             isPaginating: true
         })
 
-        m_service.getAllCharacters({offset: state.offset})
-            .then(newchars => {
+        m_service.getComics(9, state.offset)
+            .then(newcomics => {
                 setState((prevState) => ({
                     ...prevState,
-                    chars: [...state.chars, ...newchars],
+                    comics: [...state.comics, ...newcomics],
                     isPaginating: false,
                 }))
             })
@@ -53,18 +53,21 @@ export const useCharList = () => {
     }
 
 
+
     useEffect(() => {
 
-        loadChars()
-
+        loadComics()
 
     }, [state.offset])
 
+    const {comics, isPaginating} = state
+
     return {
-        incrementLimit,
-        loadChars,
         isLoading,
         error,
-        ...state
+        loadComics,
+        incrementLimit,
+        isPaginating,
+        comics,
     }
 }

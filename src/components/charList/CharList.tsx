@@ -32,7 +32,7 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelect}) => {
 
             <ErrorBoundary error={error} onTryhandler={loadChars}>
 
-                <Preloader isLoading={isLoading} afterSpinner={() => (
+                <Preloader isLoading={!chars.length} afterSpinner={() => (
                     <>
 
                         <ul className="char__grid">
@@ -50,7 +50,7 @@ const CharList: FC<CharListProps> = memo(({selectedChar, onCharSelect}) => {
                                 )
                             }) : <h2>No characters were found!</h2>}
                         </ul>
-                        <Button style={{display: offset >= 1563 ? 'none' : 'block'}} onClick={incrementLimit(9)}
+                        <Button disabled={isPaginating} style={{display: offset >= 1563 ? 'none' : 'block'}} onClick={incrementLimit(9)}
                                 className="button__main button__long">
 
                             <p>{isPaginating ? 'Loading...' : 'Load more'}</p>

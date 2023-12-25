@@ -51,7 +51,6 @@ const AppHeader = () => {
             <nav className="app__menu">
                 <ul>
                     <li><NavLink end className={'nav-link'} to={'/'}>Characters</NavLink></li>
-                    /
                     <li><NavLink  className={'nav-link'} to={'/comics'}>Comics</NavLink></li>
                 </ul>
             </nav>

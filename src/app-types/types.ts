@@ -316,3 +316,24 @@ export interface Item4 {
     resourceURI: string
     name: string
 }
+
+
+export type ComicsListStateType = {
+    comicsLink: string
+    thumbnail: string
+    description: string
+    name: string
+    pages: number | string
+    price: string
+    id: string
+}
+
+export type ComicsType = {
+    comics: ComicsListStateType[]
+    isPaginating: boolean
+    offset: number
+}
+
+export type SingleComicType = {
+    comic: ComicsListStateType
+}

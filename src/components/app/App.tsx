@@ -1,12 +1,8 @@
 import AppHeader from "../appHeader/AppHeader";
 import styled from "styled-components";
 import {FC, memo} from "react";
-import {Chars} from "../pages/Chars/Chars.tsx";
-import ComicsList from "../pages/Comics/ComicsList.tsx";
-import {Route, Routes} from "react-router-dom";
-import {Page404} from "../pages/404/404.tsx";
-import SingleComic from "../pages/SingleComic/SingleComic.tsx";
 import {useTitle} from "../../hooks/useTitle.ts";
+import {AppRoutes} from "../../routes/Routes.tsx";
 
 
 const StyledApp = styled.div``
@@ -20,13 +16,7 @@ const App: FC = memo(() => {
             <AppHeader/>
             <main>
 
-                <Routes>
-                    <Route  index element={<Chars/>}/>
-                    <Route path={'comics'} element={<ComicsList/>}/>
-                    <Route path={'comics/:id'} element={<SingleComic/>}/>
-                    <Route path={'*'} element={<Page404 />}/>
-                </Routes>
-
+                <AppRoutes />
 
             </main>
 
