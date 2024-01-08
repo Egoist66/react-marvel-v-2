@@ -9,7 +9,7 @@ type getAllCharsParams = {
 class MService extends MDataService {
 
     private _apiBase: string = 'https://gateway.marvel.com:443/v1/public/'
-    private _apiKey: string = 'apikey=86cdbb80c53d57e047d3f5960d6b0596'
+    private _apiKey: string = `apikey=${import.meta.env.VITE_API_KEY}`
     private _limitCount: number = 9
     private _charOffset: number = 210
 
