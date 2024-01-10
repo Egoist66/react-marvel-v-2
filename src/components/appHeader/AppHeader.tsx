@@ -44,7 +44,7 @@ const AppHeader = () => {
         <StyledAppHeader id={'app__header'}>
 
             <h1 className="app__title">
-                <NavLink end to={'/'}>
+                <NavLink  end to={'/'}>
                     <span>Marvel</span> information portal
                 </NavLink>
             </h1>

@@ -46,7 +46,7 @@ const ComicsList: FC = memo(() => {
                                         <div className="comics__item-price">{c.price}</div>
                                     </NavLink>
                                 </li>
-                            )) : <h2>No comics exists...</h2>}
+                            )) : <h2>No comics found...</h2>}
 
 
                         </ul>

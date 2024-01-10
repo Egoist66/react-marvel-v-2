@@ -45,6 +45,7 @@ export const CharComicsInfoView: FC<CharComicsInfoProps> = memo(({char, loadChar
 
 
                         </ul>
+                        
                     </>
                 )}
             />

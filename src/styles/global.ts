@@ -196,6 +196,16 @@ export const GlobalStyles = createGlobalStyle`
       transform: translateY(-5px);
     }
   }
+  
+  .error {
+    margin: 5px 0;
+    text-align: center;
+    color: red;
+  }
+  
+  .char-form {
+    padding: 15px;
+  }
 
   @keyframes pulse {
     0% {

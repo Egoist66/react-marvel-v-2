@@ -36,11 +36,11 @@ export const useChar = (charID?: number) => {
 
 
 
-    const loadCharInfo = useCallback(() => {
+    const loadCharInfo = useCallback((id?: number) => {
         onLoad(true)
 
         m_service
-            .getCharacter(() => charID!)
+            .getCharacter(() => id ? id : charID!)
             .then((char) => {
                 setState({
                     ...state,

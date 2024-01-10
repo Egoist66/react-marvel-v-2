@@ -1,4 +1,4 @@
-import {DataRootCharacters, RootComics} from "../app-types/types.ts";
+import {DataRootCharacters, RootComics, RootFoundChar} from "../app-types/types.ts";
 import {RandomID} from "../utils/randomId.ts";
 import {MDataService} from "./mdata-service.ts";
 
@@ -50,11 +50,21 @@ class MService extends MDataService {
 
         return this.transformComicsData(comics.data.results)
     }
-    async getSingleComic(id: string){
+
+
+        async getSingleComic(id: string){
         const comic: RootComics = await this.getResource(`${this._apiBase}comics/${id}?${this._apiKey.trim()}`, 'json')
 
         return this.transformSingleComicData(comic.data.results)
     }
+
+    async findSingleChar(name: string){
+        const foundChar: RootFoundChar = await this.getResource(`${this._apiBase}characters?name=${name}&${this._apiKey.trim()}`, 'json')
+
+        return this.transformFoundChar(foundChar.data.results)
+    }
+
+
 
 
 }

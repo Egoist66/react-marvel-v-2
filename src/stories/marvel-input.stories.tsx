@@ -10,7 +10,7 @@ export default {
 
 const textChange = action('change input')
 export const MarvelDefferedInput: FC = () => {
-    const [text, setText] = useState<string>('$')
+    const [text, setText] = useState<string>(' ')
     // @ts-ignore
     const [users, setUsers] = useState<typeof userData>(userData)
     const defferedValue = useDeferredValue(text)
@@ -74,6 +74,45 @@ export const MarvelTransitionInput: FC = () => {
                     <p key={u._id}>{u.name}</p>
                 )) : <h2>No users</h2>
             }
+
+        </div>
+    )
+}
+
+export const FetchComponent: FC = () => {
+    const [data, setData] = useState<string>('')
+    const [url, setUrl] = useState<string>('')
+    const fetchData = () => {
+        (async () => {
+            const response = await fetch(`https://rpqgtp-3000.csb.app/${url}`)
+
+                const result = await response.text()
+                setData(result)
+
+        })()
+    }
+
+
+
+    return (
+        <div>
+            <div>
+                <input
+                    value={url}
+                    onChange={(e) => setUrl(e.currentTarget.value)}
+                    placeholder={'Enter URL'}
+                    type="url"
+                />
+            </div>
+
+            <div style={{margin: '20px 0px'}}>
+                <button data-url={url} onClick={fetchData}>Fetch data</button>
+            </div>
+
+
+
+                {JSON.stringify(data, null, 2)}
+
 
         </div>
     )

@@ -4,6 +4,7 @@ import Skeleton from "../skeleton/Skeleton";
 import {CharInfoProps} from "../../app-types/types.ts";
 import {useChar} from "../../hooks/useChar.ts";
 import {CharComicsInfoView} from "./CharComicsInfoView.tsx";
+import {CharForm} from "./CharForm.tsx";
 
 const StyledCharInfo = styled.div``;
 
@@ -36,6 +37,8 @@ const CharInfo: FC<CharInfoProps> = memo(({charId}) => {
                     loadCharInfo={loadCharInfo}
                 />
             )}
+
+            <CharForm />
         </StyledCharInfo>
     );
 

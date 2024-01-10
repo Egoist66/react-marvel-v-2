@@ -337,3 +337,77 @@ export type ComicsType = {
 export type SingleComicType = {
     comic: ComicsListStateType
 }
+
+
+
+
+
+export interface RootFoundChar {
+    code: number
+    status: string
+    copyright: string
+    attributionText: string
+    attributionHTML: string
+    etag: string
+    data: DataFoundChar
+}
+
+export interface DataFoundChar {
+    offset: number
+    limit: number
+    total: number
+    count: number
+    results: ResultFound[]
+}
+
+export interface ResultFound {
+    id: number
+    name: string
+    description: string
+    modified: string
+    thumbnail: FoundThumbnail
+    resourceURI: string
+    comics: FoundComics
+    series: FoundSeries
+    stories: FoundStories
+    events: FoundEvents
+    urls: FoundUrl[]
+}
+
+export interface FoundThumbnail {
+    path: string
+    extension: string
+}
+
+export interface FoundComics {
+    available: number
+    collectionURI: string
+    items: any[]
+    returned: number
+}
+
+export interface FoundSeries {
+    available: number
+    collectionURI: string
+    items: any[]
+    returned: number
+}
+
+export interface FoundStories {
+    available: number
+    collectionURI: string
+    items: any[]
+    returned: number
+}
+
+export interface FoundEvents {
+    available: number
+    collectionURI: string
+    items: any[]
+    returned: number
+}
+
+export interface FoundUrl {
+    type: string
+    url: string
+}

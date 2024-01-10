@@ -1,5 +1,6 @@
-import {RootCharactersType, CharItems, ComicsResult, ComicsListStateType} from "../app-types/types";
+import {RootCharactersType, CharItems, ComicsResult, ComicsListStateType, ResultFound} from "../app-types/types";
 import {cutString} from "../utils/string-cut";
+import {FoundCharState} from "../components/charInfo/CharForm.tsx";
 
 
 export class MDataService {
@@ -77,6 +78,15 @@ export class MDataService {
                 thumbnail: `${results[0]?.thumbnail?.path}.${results[0]?.thumbnail.extension}`
             }
         }
+    }
+
+    protected transformFoundChar = (results: ResultFound[]) => {
+        const result: FoundCharState = {
+            id: results[0]?.id ?? null,
+            message: results.length <= 0 ? 'Such character does not exist' : 'Here it is!'
+
+        }
+        return result
     }
 
 }
