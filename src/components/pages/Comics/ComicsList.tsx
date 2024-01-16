@@ -6,8 +6,8 @@ import {drawComicsThubmnail} from "../../../utils/check-thumbnail.ts";
 import AppBanner from "../../appBanner/AppBanner.tsx";
 import {Button} from "../../reusable/Button.tsx";
 import {NavLink} from "react-router-dom";
-import {useTitle} from "../../../hooks/useTitle.ts";
 import {useComics} from "../../../hooks/useComics.ts";
+import { Helmet } from "react-helmet";
 
 
 const StyledComicsList = styled.div`
@@ -18,7 +18,7 @@ const StyledComicsList = styled.div`
 
 const ComicsList: FC = memo(() => {
 
-    useTitle('Comics')
+    
     const {
         error,
         loadComics,
@@ -29,6 +29,14 @@ const ComicsList: FC = memo(() => {
 
     return (
         <>
+
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Comics</title>
+                <meta name="description" content="This page is about marvel comics" />
+                <link rel="canonical" href="/comics" />
+            </Helmet>
+
             <AppBanner/>
 
             <StyledComicsList className="comics__list">
