@@ -81,6 +81,15 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
   }
 
+  body,html {
+    min-width: 1100px;
+   
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
   .app {
     width: 1100px;
     margin: 0 auto;
